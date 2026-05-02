@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasbor Interaktif: Laporan Data Perundungan (Bullying) Global & Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutrals with Muted Teal and Soft Rose Accents -->
+    <!-- Application Structure Plan: The SPA is structured logically starting from a high-level global perspective, narrowing down to the specific situation in Indonesia, and finally exploring the qualitative types of bullying. A sticky top navigation allows quick jumps. This structure facilitates a "macro to micro" understanding, which is optimal for absorbing statistical impact followed by localized relevance. -->
+    <!-- Visualization & Content Choices: Global Prevalence -> Goal: Inform proportion -> Donut Chart (Chart.js) -> Shows stark contrast of affected vs unaffected globally. Indoneisa Demographics -> Goal: Compare levels -> Bar Chart (Chart.js) -> Easily compares case distribution across education tiers. Bullying Types -> Goal: Organize context -> Interactive Tabs (Vanilla JS) -> Keeps UI clean while allowing deep-dive into specific definitions. Confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        @media (max-width: 768px) { .chart-container { height: 280px; } }
+        .tab-btn.active { border-bottom: 2px solid #0f766e; color: #0f766e; font-weight: 600; }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl text-teal-700">&#9888;</span>
+                    <span class="font-bold text-xl tracking-tight text-slate-800">Laporan Anti-Perundungan</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#pendahuluan" class="text-slate-500 hover:text-teal-700 transition">Pendahuluan</a>
+                    <a href="#global" class="text-slate-500 hover:text-teal-700 transition">Data Global</a>
+                    <a href="#indonesia" class="text-slate-500 hover:text-teal-700 transition">Data Indonesia</a>
+                    <a href="#jenis" class="text-slate-500 hover:text-teal-700 transition">Jenis & Dampak</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-16">
+
+        <section id="pendahuluan" class="text-center space-y-6 pt-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
+                Memahami Krisis Perundungan:<br>
+                <span class="text-teal-700">Dari Skala Global hingga Indonesia</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                Aplikasi interaktif ini merangkum data dan temuan utama terkait perundungan (bullying) dari berbagai laporan lembaga dunia seperti UNESCO, UNICEF, PISA, serta lembaga nasional seperti KPAI dan FSGI. Silakan jelajahi data di bawah ini untuk memahami urgensi perlindungan anak di lingkungan pendidikan.
+            </p>
+            <div class="flex justify-center gap-4 pt-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-center w-48">
+                    <div class="text-3xl font-bold text-rose-600 mb-1">32%</div>
+                    <div class="text-sm text-slate-500">Siswa Global Terdampak (UNESCO)</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-center w-48">
+                    <div class="text-3xl font-bold text-teal-700 mb-1">41.1%</div>
+                    <div class="text-sm text-slate-500">Siswa RI Terdampak (PISA 2018)</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="global" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+            <div class="max-w-3xl mx-auto text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Lanskap Perundungan Global</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    Bagian ini menampilkan potret skala perundungan di dunia. Merujuk pada laporan UNESCO ("Behind the numbers: ending school violence and bullying"), perundungan adalah fenomena global yang masif. Data ini memberikan konteks bahwa tantangan ini tidak hanya dialami secara lokal.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="border-l-4 border-rose-500 pl-4">
+                        <h3 class="text-xl font-bold text-slate-800">1 dari 3 Pelajar di Dunia</h3>
+                        <p class="text-slate-600 mt-2">Hampir sepertiga pelajar di seluruh dunia dilaporkan mengalami perundungan oleh teman sebayanya di sekolah setidaknya sekali dalam sebulan terakhir.</p>
+                    </div>
+                    <div class="border-l-4 border-amber-500 pl-4">
+                        <h3 class="text-xl font-bold text-slate-800">Dampak Akademis</h3>
+                        <p class="text-slate-600 mt-2">Anak-anak yang sering dirundung memiliki kemungkinan hampir tiga kali lebih besar untuk merasa terasing di sekolah dan lebih dari dua kali lipat kemungkinannya untuk bolos kelas.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-50 p-6 rounded-xl">
+                    <h4 class="text-center font-semibold text-slate-700 mb-4">Proporsi Siswa Terdampak Perundungan Secara Global</h4>
+                    <div class="chart-container">
+                        <canvas id="globalChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-slate-400 mt-4">Sumber Referensi Visual: Estimasi Laporan UNESCO/UNICEF</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="indonesia" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+            <div class="max-w-3xl mx-auto text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Situasi Perundungan di Indonesia</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    Bagian ini memfokuskan data pada konteks Indonesia. Data merujuk pada temuan Programme for International Student Assessment (PISA) serta catatan tahunan Federasi Serikat Guru Indonesia (FSGI) dan Komisi Perlindungan Anak Indonesia (KPAI) yang menunjukkan tingkat kerawanan di berbagai jenjang pendidikan.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-10">
+                <div class="order-2 md:order-1 bg-slate-50 p-6 rounded-xl">
+                    <h4 class="text-center font-semibold text-slate-700 mb-4">Distribusi Kasus Berdasarkan Jenjang (Estimasi FSGI)</h4>
+                    <div class="chart-container">
+                        <canvas id="indoChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-slate-400 mt-4">Sumber Referensi Visual: Kompilasi Laporan FSGI (Tahun representatif)</p>
+                </div>
+
+                <div class="space-y-6 order-1 md:order-2">
+                    <div class="bg-teal-50 p-6 rounded-xl border border-teal-100">
+                        <h3 class="text-lg font-bold text-teal-800">Catatan Kritis PISA</h3>
+                        <p class="text-teal-700 mt-2 text-sm leading-relaxed">
+                            Laporan PISA (2018) menempatkan Indonesia pada posisi dengan tingkat perundungan siswa yang cukup tinggi di angka 41.1%, jauh di atas rata-rata negara OECD (22.7%).
+                        </p>
+                    </div>
+                    <div class="bg-rose-50 p-6 rounded-xl border border-rose-100">
+                        <h3 class="text-lg font-bold text-rose-800">Kerawanan di Jenjang SMP</h3>
+                        <p class="text-rose-700 mt-2 text-sm leading-relaxed">
+                            Data FSGI sering menyoroti bahwa jenjang Sekolah Menengah Pertama (SMP) menyumbang persentase kasus perundungan tertinggi, seringkali melampaui 40% dari total kasus kekerasan di sekolah yang dilaporkan, diikuti oleh jenjang SD.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="jenis" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+             <div class="max-w-3xl mx-auto text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Jenis Perundungan & Identifikasi</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    Penting untuk memahami bahwa perundungan bermutasi ke dalam berbagai bentuk. Interaksi di bawah ini memungkinkan Anda mengeksplorasi empat kategori utama perundungan berdasarkan definisi umum institusi psikologi dan perlindungan anak.
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-wrap border-b border-slate-200 mb-6 justify-center">
+                    <button class="tab-btn active px-6 py-3 text-slate-500 hover:text-teal-600 focus:outline-none transition-colors" data-target="fisik">Fisik</button>
+                    <button class="tab-btn px-6 py-3 text-slate-500 hover:text-teal-600 focus:outline-none transition-colors" data-target="verbal">Verbal</button>
+                    <button class="tab-btn px-6 py-3 text-slate-500 hover:text-teal-600 focus:outline-none transition-colors" data-target="relasional">Relasional</button>
+                    <button class="tab-btn px-6 py-3 text-slate-500 hover:text-teal-600 focus:outline-none transition-colors" data-target="siber">Siber (Cyber)</button>
+                </div>
+
+                <div id="fisik" class="tab-content block animate-[fadeIn_0.3s_ease-in-out]">
+                    <div class="bg-slate-50 rounded-xl p-8 flex flex-col md:flex-row gap-6 items-start">
+                        <div class="text-5xl text-rose-500">&#9994;</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Perundungan Fisik</h3>
+                            <p class="text-slate-600 leading-relaxed mb-4">Tindakan kekerasan yang melukai tubuh korban atau merusak barang miliknya. Ini adalah bentuk perundungan yang paling mudah diidentifikasi karena meninggalkan bekas nyata.</p>
+                            <ul class="list-disc list-inside text-slate-700 space-y-1">
+                                <li>Memukul, menendang, atau mendorong.</li>
+                                <li>Meludahi atau mengancam dengan senjata.</li>
+                                <li>Merusak, mengambil paksa, atau menyembunyikan barang korban.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="verbal" class="tab-content hidden animate-[fadeIn_0.3s_ease-in-out]">
+                    <div class="bg-slate-50 rounded-xl p-8 flex flex-col md:flex-row gap-6 items-start">
+                        <div class="text-5xl text-amber-500">&#10077;</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Perundungan Verbal</h3>
+                            <p class="text-slate-600 leading-relaxed mb-4">Menggunakan kata-kata tertulis atau lisan untuk menyakiti, mengintimidasi, atau merendahkan orang lain. Dampaknya sangat merusak psikologis secara jangka panjang.</p>
+                            <ul class="list-disc list-inside text-slate-700 space-y-1">
+                                <li>Mengejek, mencela, atau memberi nama panggilan buruk (name-calling).</li>
+                                <li>Komentar rasis, seksis, atau diskriminatif lainnya.</li>
+                                <li>Mengancam akan melukai atau memeras.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="relasional" class="tab-content hidden animate-[fadeIn_0.3s_ease-in-out]">
+                    <div class="bg-slate-50 rounded-xl p-8 flex flex-col md:flex-row gap-6 items-start">
+                        <div class="text-5xl text-teal-600">&#128101;</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Perundungan Relasional (Sosial)</h3>
+                            <p class="text-slate-600 leading-relaxed mb-4">Tindakan yang bertujuan merusak reputasi sosial seseorang atau hubungan mereka dengan orang lain. Sering terjadi secara tersembunyi dan sulit dideteksi oleh guru atau orang tua.</p>
+                            <ul class="list-disc list-inside text-slate-700 space-y-1">
+                                <li>Menyebarkan rumor atau gosip palsu.</li>
+                                <li>Sengaja mengucilkan seseorang dari kelompok (pengabaian).</li>
+                                <li>Menghasut orang lain agar memusuhi korban.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="siber" class="tab-content hidden animate-[fadeIn_0.3s_ease-in-out]">
+                    <div class="bg-slate-50 rounded-xl p-8 flex flex-col md:flex-row gap-6 items-start">
+                        <div class="text-5xl text-blue-500">&#128241;</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Cyberbullying (Siber)</h3>
+                            <p class="text-slate-600 leading-relaxed mb-4">Perundungan yang terjadi melalui platform digital, media sosial, aplikasi pesan, atau forum game. Sifatnya anonim, menyebar cepat, dan tidak mengenal batas ruang/waktu.</p>
+                            <ul class="list-disc list-inside text-slate-700 space-y-1">
+                                <li>Mengirim pesan kasar, ancaman, atau ujaran kebencian secara online.</li>
+                                <li>Menyebarkan foto/video pribadi korban tanpa izin (doxing/revenge porn).</li>
+                                <li>Membuat akun palsu untuk menyerang atau mengolok-olok orang lain.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center pb-8 border-t border-slate-200 pt-8 mt-16">
+            <p class="text-slate-500 text-sm">
+                Catatan: Data yang disajikan merupakan agregasi ilustratif berdasarkan laporan lembaga publik (UNESCO, PISA, FSGI, KPAI) untuk tujuan edukasi dan peningkatan kesadaran.
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        const initCharts = () => {
+            const ctxGlobal = document.getElementById('globalChart').getContext('2d');
+            new Chart(ctxGlobal, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Mengalami Perundungan', 'Tidak Mengalami Perundungan'],
+                    datasets: [{
+                        data: [32, 68],
+                        backgroundColor: ['#e11d48', '#e2e8f0'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Segoe UI', sans-serif" } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return context.label + ': ' + context.parsed + '%'; }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            const ctxIndo = document.getElementById('indoChart').getContext('2d');
+            new Chart(ctxIndo, {
+                type: 'bar',
+                data: {
+                    labels: ['SD', 'SMP', 'SMA', 'SMK'],
+                    datasets: [{
+                        label: 'Persentase Kasus Berdasarkan Jenjang',
+                        data: [25, 45, 18, 12],
+                        backgroundColor: '#0f766e',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Persentase (%)' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return context.parsed.y + '% dari total kasus tercatat'; }
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        const setupTabs = () => {
+            const buttons = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    contents.forEach(content => {
+                        content.classList.remove('block');
+                        content.classList.add('hidden');
+                    });
+
+                    const targetId = button.getAttribute('data-target');
+                    const targetContent = document.getElementById(targetId);
+                    targetContent.classList.remove('hidden');
+                    targetContent.classList.add('block');
+                });
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            setupTabs();
+        });
+
+        document.head.insertAdjacentHTML("beforeend", `<style>@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style>`);
+    </script>
+</body>
+</html>
